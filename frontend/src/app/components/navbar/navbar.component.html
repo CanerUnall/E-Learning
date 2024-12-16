@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="https://companieslogo.com/img/orig/CAP.PA-9b4110b0.png?t=1720244491" alt="Capgemini Logo" width="40"
+        height="40" class="d-inline-block align-top">
+      MyLearning
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- Admin rolü varsa User Management ve Course Management menüleri gösterilir -->
+        <li class="nav-item" *ngIf="userRole === 'Admin'">
+          <a class="nav-link" routerLink="/userManagement">User Management</a>
+        </li>
+        <li class="nav-item" *ngIf="userRole === 'Admin'">
+          <a class="nav-link" routerLink="/courseManagement">Course Management</a>
+        </li>
+        <li class="nav-item" *ngIf="userRole === 'Student'">
+          <a class="nav-link" (click)="navigateToDashboard()">My Dasboard</a>
+        </li>
+      </ul>
+
+      <!-- Arama Formu
+      <form class="d-flex mx-3" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form> -->
+
+      <!-- Profil ve Giriş Kontrolleri -->
+      <div class="btn-group">
+        <!-- Profil ikonu her zaman gösterilir -->
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+          [attr.data-bs-toggle]="isLoggedIn ? 'dropdown' : null" aria-expanded="false" (click)="handleProfileClick()">
+          <i class="fas fa-user"></i>
+        </button>
+
+        <!-- Dropdown Menü (Sadece giriş yapılmışsa gösterilir) -->
+        <ul *ngIf="isLoggedIn" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" routerLink="/profile">Profile Details</a></li>
+          <li><a class="dropdown-item" (click)="logout()">Log Out</a></li>
+        </ul>
+      </div>
+
+
+    </div>
+  </div>
+</nav>

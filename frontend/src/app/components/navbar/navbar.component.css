@@ -1,0 +1,14 @@
+.navbar-brand img {
+    margin-right: 10px; /* Logo ile metin arasında boşluk */
+  }
+
+ /* Ok işaretini kaldırmak için */
+.btn-group .dropdown-toggle::after {
+  display: none; /* Ok işaretini gizler */
+}
+
+/* Dropdown menünün sola hizalanmasını sağlamak için */
+.dropdown-menu {
+  right: 0; /* Sağ yerine sola hizalar */
+  left: auto; /* Soldan hizalamayı iptal eder */
+}

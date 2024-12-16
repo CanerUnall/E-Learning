@@ -1,0 +1,18 @@
+.sidebar {
+    background-color: #f8f9fa;
+    height: 100vh;
+  }
+  
+  .card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  .carousel-item {
+    transition: transform 0.6s ease;
+  }
+  
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-color: #333;
+  }
+  

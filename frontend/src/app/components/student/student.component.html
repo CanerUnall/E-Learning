@@ -1,0 +1,85 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <nav class="col-md-1"></nav>
+
+    <!-- Main content -->
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" *ngIf="courseCluster">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <h2>Dashboard</h2>
+      </div>
+
+
+
+      <!-- All Courses Section -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h4>All Courses</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3" *ngFor="let course of courseCluster.allCourses">
+              <div class="card h-100 d-flex flex-column">
+                <!-- Resmi sabit boyutta tutmak için width ve height ekliyoruz -->
+                <img [src]="course.image" class="card-img-top" alt="Course Image" style="width: 100%; height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                  <!-- Kart içeriğini eşit hizalamak için flex kullanıyoruz -->
+                  <h5 class="card-title text-left">{{ course.courseName }}</h5>
+                  <button class="btn btn-primary mt-auto" (click)="goToCourseDetails(course.courseId)">View Details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Followed Courses Section -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-secondary text-white">
+          <h4>Followed Courses</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3" *ngFor="let course of courseCluster.followedCourses">
+              <div class="card h-100 d-flex flex-column">
+                <!-- Resim boyutunu sabitlemek için style attribute kullanılıyor -->
+                <img [src]="course.image" class="card-img-top" alt="Course Image" style="width: 100%; height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                  <!-- Kart içeriği ve metni flexbox ile hizalanıyor -->
+                  <h5 class="card-title text-center">{{ course.courseName }}</h5>
+                  <button class="btn btn-primary mt-auto" (click)="goToCourseDetails(course.courseId)">View Details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unfollowed Courses Section -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-secondary text-white">
+          <h4>Unfollowed Courses</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3" *ngFor="let course of courseCluster.unfollowedCourses">
+              <div class="card h-100 d-flex flex-column">
+                <!-- Resim boyutunu sabitlemek için style attribute kullanılıyor -->
+                <img [src]="course.image" class="card-img-top" alt="Course Image" style="width: 100%; height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                  <!-- Kart içeriği ve metni flexbox ile hizalanıyor -->
+                  <h5 class="card-title text-center">{{ course.courseName }}</h5>
+                  <button class="btn btn-primary mt-auto" (click)="goToCourseDetails(course.courseId)">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+      </div>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<p></p>
+<div class="d-flex align-items-center justify-content-center profile-container">
+  <!-- Profile image -->
+  <img [src]="profile.imageUrl" alt="{{ profile.firstName }}" class="rounded-circle profile-image" />
+
+  <!-- Profile details -->
+  <div class="profile-details ms-3 text-center">
+    <h5 class="profile-name">{{ profile.firstName }} {{ profile.lastName }}</h5>
+    <p class="card-text"><a href="mailto:{{ profile.email }}"><i class="fa-solid fa-envelope"></i> {{ profile.email }}</a></p>
+    <p class="card-text"><a href="tel:{{ profile.phone }}"><i class="fa-solid fa-phone"></i> {{ profile.phone }}</a></p>
+    <p class="card-text"><strong>Department:</strong> {{ profile.department }}</p>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+< <div class="dashboard">
+  <h1>Available Courses</h1>
+  <div class="course-container">
+    <div *ngFor="let course of courses" class="course-item" (click)="viewCourseDetails(course.courseId)">
+      <img [src]="course.image" alt="{{ course.courseName }}" />
+      <h2>{{ course.courseName }}</h2>
+      <p>{{ course.description }}</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+

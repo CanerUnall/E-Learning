@@ -1,0 +1,28 @@
+.profile-container {
+  flex-direction: column; /* Stack image and details vertically */
+  text-align: center; /* Center text */
+}
+
+.profile-image {
+  width: 200px; /* Adjust as needed */
+  height: 200px; /* Adjust as needed */
+  object-fit: cover; /* Ensure image covers the circle */
+}
+
+.profile-details {
+  margin-top: 10px; /* Space between image and details */
+}
+
+.card-text a {
+  text-decoration: none; /* Remove underline */
+  color: #007bff; /* Link color */
+  transition: color 0.2s; /* Smooth transition */
+}
+
+.card-text a:hover {
+  color: #0056b3; /* Darker color on hover */
+}
+.profile-name{
+  font-size: 32px;
+  font-weight: bold;
+}

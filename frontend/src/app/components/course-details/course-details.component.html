@@ -1,0 +1,110 @@
+<div class="container mt-5" *ngIf="course">
+  <!-- Course Header -->
+  <div class="row">
+    <div class="col-md-4">
+      <img [src]="course.image" class="img-fluid rounded course-image" alt="{{ course.courseName }}">
+    </div>
+    <div class="col-md-8">
+      <h2 class="course-title">{{ course.courseName }}</h2>
+      <p class="course-description">{{ course.description }}</p>
+      <p><strong>Material Language:</strong> {{ course.materialLanguage }}</p>
+      <p><strong>Spoken Language:</strong> {{ course.spokenLanguage }}</p>
+    </div>
+  </div>
+
+  <!-- Course Details -->
+  <div class="row mt-4" *ngIf="course?.courseDetailsList && course.courseDetailsList.length > 0">
+    <div class="col-md-6" *ngFor="let detail of course.courseDetailsList; let i = index">
+      <div class="card mb-3">
+        <div class="card-header">
+          Course Schedule {{ i + 1 }}
+        </div>
+        <div class="card-body">
+          <ul>
+            <li><strong>Start Date:</strong> {{ detail.startDate }}</li>
+            <li><strong>Days of Courses:</strong> {{ course.dayPartsOfCourse }}</li>
+            <li><strong>Time:</strong> {{ detail.startTime }} - {{ detail.endTime }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          Location & Format
+        </div>
+        <div class="card-body">
+          <p><strong>Online:</strong> {{ course.online ? 'Yes' : 'No' }}</p>
+          <p *ngIf="!course.online"><strong>Location:</strong> {{ course.location }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tek Dropdown (Admin/Backoffice için listeleme, Öğrenci için kayıt) -->
+  <div class="row mt-4" *ngIf="userRole === 'Admin' || userRole === 'Back Office' || userRole === 'Student'">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="scheduleSelect"><strong>Select a Schedule:</strong></label>
+        <select [(ngModel)]="selectedSchedule" (change)="onScheduleChange()" class="form-control"
+          id="scheduleSelect">
+          <option *ngFor="let detail of course.courseDetailsList" [ngValue]="detail">
+            {{ detail.startDate }} - {{ detail.startTime }} to {{ detail.endTime }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin/Backoffice için Öğretmen ve Öğrenci Listeleri -->
+  <div *ngIf="userRole === 'Admin' || userRole === 'Back Office'" class="row mt-4">
+    <!-- Öğretmen Listesi -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          Teacher for Selected Schedule
+        </div>
+        <div class="card-body">
+          <p *ngIf="selectedTeacher; else noTeacher">
+            <strong>Teacher:</strong> {{ selectedTeacher }}
+          </p>
+          <ng-template #noTeacher>
+            <p class="text-muted">No teacher assigned for the selected schedule.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Öğrenci Listesi -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          Students Enrolled for Selected Schedule
+        </div>
+        <div class="card-body">
+          <ul class="list-group mt-3">
+            <li class="list-group-item" *ngFor="let student of selectedScheduleStudents">
+              {{ student.userName }} {{ student.lastName }}
+            </li>
+          </ul>
+
+          <p *ngIf="!selectedScheduleStudents.length" class="text-muted mt-2">
+            No students enrolled for the selected schedule.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Öğrenci için Kayıt İşlemleri -->
+  <div *ngIf="userRole === 'Student'" class="row mt-4">
+    <div class="col text-center">
+      <button class="btn btn-primary mt-3" (click)="registerToCourse()"
+        [disabled]="!selectedSchedule || isStudentRegisteredForSelectedSchedule || isCapacityFull">
+        {{ isStudentRegisteredForSelectedSchedule ? 'Already Registered' : 'Register to Course' }}
+      </button>
+      <p *ngIf="isCapacityFull" class="text-danger mt-2">Capacity is full for the selected schedule.</p>
+    </div>
+  </div>
+</div>

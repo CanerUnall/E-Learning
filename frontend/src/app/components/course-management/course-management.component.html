@@ -1,0 +1,192 @@
+<div class="container">
+  <h2>Course Management</h2>
+  <!-- Success or Error Messages -->
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+  <!-- Course Table -->
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Course Name</th>
+        <th>Description</th>
+        <th>Day Parts Of Course</th>
+        <th>Teacher Names</th>
+        <th>Completed</th>
+        <th>Online</th>
+        <th>Material Language</th>
+        <th>Spoken Language</th>
+        <th>Location</th>
+        <th>Student List</th>
+        <th>Course Dates</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let course of courses" (click)="selectCourse(course)"
+        [ngClass]="{'selected-row': editingCourse?.courseId === course.courseId}">
+        <td>{{ course.courseName }}</td>
+        <td>{{ course.description }}</td>
+        <td>{{ course.dayPartsOfCourse }}</td>
+        <td><span *ngFor="let detail of course.courseDetailsList">{{ detail.teacherName }}</span></td>
+        <td><span *ngFor="let detail of course.courseDetailsList">{{ detail.completed ? 'Completed' : 'In Progress'
+            }}</span></td>
+        <td>{{ course.online }}</td>
+        <td>{{ course.materialLanguage }}</td>
+        <td>{{ course.spokenLanguage }}</td>
+        <td>{{ course.location }}</td>
+        <td><i class="fa fa-users" (click)="openModal2('studentList', course)"></i></td>
+        <td><i class="fa fa-calendar" (click)="openModal2('courseDates', course)"></i></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- Action Buttons (Add, Edit, Delete) -->
+  <div class="mt-3 d-flex justify-content-between">
+    <button class="btn btn-success" (click)="openModal('add')">Add Course</button>
+    <button class="btn btn-primary" [disabled]="!editingCourse || editingCourse?.courseId === undefined"
+      (click)="openModal('edit')">Edit Selected Course</button>
+    <button class="btn btn-danger" [disabled]="!editingCourse || editingCourse?.courseId === undefined"
+      (click)="deleteCourse(editingCourse?.courseId ?? 0)">Delete Selected Course</button>
+  </div>
+
+  <!-- Add/Edit Course Modal -->
+  <div class="modal fade" id="courseModal" tabindex="-1" aria-labelledby="courseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="courseModalLabel">{{ modalTitle }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="saveCourse()">
+            <div class="mb-3">
+              <label for="courseName" class="form-label">Course Name</label>
+              <input [(ngModel)]="currentCourse.courseName" name="courseName" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <input [(ngModel)]="currentCourse.description" name="description" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="dayPartsOfCourse" class="form-label">Day Parts of Course</label>
+              <input [(ngModel)]="currentCourse.dayPartsOfCourse" name="dayPartsOfCourse" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="materialLanguage" class="form-label">Material Language</label>
+              <input [(ngModel)]="currentCourse.materialLanguage" name="materialLanguage" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="spokenLanguage" class="form-label">Spoken Language</label>
+              <input [(ngModel)]="currentCourse.spokenLanguage" name="spokenLanguage" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="location" class="form-label">Location</label>
+              <input [(ngModel)]="currentCourse.location" name="location" class="form-control" required>
+            </div>
+
+            <!-- Image URL field -->
+            <div class="mb-3">
+              <label for="imageUrl" class="form-label">Image URL</label>
+              <input [(ngModel)]="currentCourse.image" name="imageUrl" class="form-control">
+            </div>
+
+            <div class="mb-3 form-check">
+              <input [(ngModel)]="currentCourse.online" type="checkbox" name="online" class="form-check-input"
+                id="online">
+              <label for="online" class="form-check-label">Online</label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">{{ modalActionButton }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Modal (Student List / Course Dates) -->
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="infoModalLabel">{{ modalTitle }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <!-- Student List Section -->
+          <div *ngIf="modalType === 'studentList'">
+            <h6>Student List:</h6>
+            <ul>
+              <li *ngFor="let detail of editingCourse?.courseDetailsList">
+                <span *ngFor="let student of detail.students">{{ student.userName }}
+                  {{ student.lastName }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Course Dates Section -->
+          <div *ngIf="modalType === 'courseDates' && editingCourse">
+            <h6>{{ modalTitle }}</h6>
+            <ul *ngIf="editingCourse?.courseDetailsList?.length !== 0">
+              <li *ngFor="let detail of editingCourse.courseDetailsList; let i = index">
+                {{ detail.startDate }} ({{ detail.startTime }} - {{ detail.endTime }})
+                <!-- Edit and Delete buttons -->
+                <button class="btn btn-sm btn-warning ms-2" (click)="editCourseDate(i)">Edit</button>
+                <button class="btn btn-sm btn-danger ms-2" (click)="removeCourseDate(i)">Remove</button>
+              </li>
+            </ul>
+            <p *ngIf="editingCourse?.courseDetailsList?.length === 0">No dates available for this course.</p>
+
+            <!-- Form to add/edit date -->
+            <form (ngSubmit)="saveCourseDetails()">
+              <div class="mb-3">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" id="startDate" [(ngModel)]="newCourseDateTime.startDate" name="startDate"
+                  class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" id="endDate" [(ngModel)]="newCourseDateTime.endDate" name="endDate"
+                  class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="newStartTime" class="form-label">Start Time</label>
+                <input type="time" id="newStartTime" [(ngModel)]="newCourseDateTime.startTime" name="newStartTime"
+                  class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="newEndTime" class="form-label">End Time</label>
+                <input type="time" id="newEndTime" [(ngModel)]="newCourseDateTime.endTime" name="newEndTime"
+                  class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="teacherName" class="form-label">Teacher Name</label>
+                <input type="text" id="teacherName" [(ngModel)]="newCourseDateTime.teacherName" name="teacherName"
+                  class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="maxStudents" class="form-label">Max Students</label>
+                <input type="number" id="maxStudents" [(ngModel)]="newCourseDateTime.maxStudents" name="maxStudents"
+                  class="form-control" required />
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()">{{ modalActionButton
+                  }}</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

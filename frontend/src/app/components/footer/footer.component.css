@@ -1,0 +1,21 @@
+html, body {
+  height: 100%; /* Sayfanın tamamını kapsaması için */
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Sayfanın en az tarayıcı yüksekliğinde olmasını sağlar */
+}
+
+.main-content {
+  flex: 1; /* İçeriğin kalan alanı doldurmasını sağlar */
+}
+
+.footer {
+  background-color: #f8f9fa; 
+  text-align: center; 
+  width: 100%; 
+  padding: 1rem 0;
+}
